@@ -29,6 +29,7 @@ public class DispenserMain {
         BankServer.getInstance().addClientToTheDataBase(new Client(125, "Wilhelm Schneider", 4355, new BigDecimal(800)));
         BankServer.getInstance().addClientToTheDataBase(new Client(126, "Vladimir Gromov",4444, new BigDecimal(2150)));
         BankServer.getInstance().addClientToTheDataBase(new Client(127, "Adam Kowalski", 4445, new BigDecimal(3440)));
+        BankServer.getInstance().addClientToTheDataBase(new Client(128, "Helena Johnson", 6565, new BigDecimal(6000)));
 //
 //        // creating several dispensers
 //        DispenserInterface<Client> dispenser = new CashDispenser(new BigDecimal("50"), "Saint Istvan st.", 1);

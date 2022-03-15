@@ -1,30 +1,25 @@
 package BankSystem;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
+
+
 import java.math.BigDecimal;
 
-@Slf4j
-@EqualsAndHashCode
+
 @Entity
-@Table(name = "clients")
-@Setter
-@SuppressWarnings("MySQLConfig")
+@Data
 public class Client {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "account_number")
     private int account_number;
-    @Column(name = "owner_name")
-    private final String ownerName;
-    @Column(name = "salt")
-    private final String salt;
-    @Column(name = "hashed_password")
-    private final String hashed_password;
-    @Column(name = "account_state")
+    private String ownerName;
+    private String salt;
+    private String hashed_password;
     private BigDecimal accountState;
 
 
@@ -46,7 +41,7 @@ public class Client {
 
     public void setPinNumber(int pinNumber) {
         // TODO ...
-        //this.pinNumber = pinNumber;
+        this.hashed_password = PasswordAdditive.hashThePlainTextPassword(String.valueOf(pinNumber), this.salt).orElseThrow();;
     }
 
     public BigDecimal getAccountState() {

@@ -1,18 +1,13 @@
 package BankSystem;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
-
-
 import java.math.BigDecimal;
-
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Client {
 
     @Id
@@ -35,13 +30,17 @@ public class Client {
         return ownerName;
     }
 
-    public int getPinNumber() {
-        return 1;
+    public String getSalt() {
+        return new String(this.salt);
     }
 
-    public void setPinNumber(int pinNumber) {
-        // TODO ...
-        this.hashed_password = PasswordAdditive.hashThePlainTextPassword(String.valueOf(pinNumber), this.salt).orElseThrow();;
+    protected void setPinNumber (int newPIN) {
+        this.salt = PasswordAdditive.generateSalt(10);
+        this.hashed_password = PasswordAdditive.hashThePlainTextPassword(String.valueOf(newPIN), this.salt).orElseThrow();
+    }
+
+    public String getHashedPassword() {
+        return new String(this.hashed_password);
     }
 
     public BigDecimal getAccountState() {

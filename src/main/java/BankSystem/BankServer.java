@@ -1,68 +1,68 @@
 package BankSystem;
 
+import DataBaseConnection.CashDispenserProcessor;
 import DataBaseConnection.ClientProcessor;
 import java.math.BigDecimal;
-import java.util.*;
 
 class BankServer {
 
     private static final BankServer INSTANCE = new BankServer();
-    private final HashMap<Integer, Client> allTheClients = new HashMap<>();
-    private BigDecimal totalBankState = new BigDecimal(0);
+    private BigDecimal wholeBankSystemState; // investment + clients money + dispensers cash.
 
     private BankServer() {
-    }
-
-    private synchronized Client getCertainClientFromDB(int accountNumber) {
-        return allTheClients.get(accountNumber);
+        this.wholeBankSystemState = ClientProcessor.getTotalMoneyState();  // just fot update wholeBankSystemState field for testing the app
+        this.wholeBankSystemState = this.wholeBankSystemState.subtract(CashDispenserProcessor.getAllDispensersMoneyState());
     }
 
     public synchronized void updateTotalMoney(BigDecimal additionalQuantity) {
-        totalBankState = totalBankState.add(additionalQuantity);
+        wholeBankSystemState = wholeBankSystemState.add(additionalQuantity);
     }
 
     public void investingByOwner (double investmentAmount) {
-        totalBankState = totalBankState.add(BigDecimal.valueOf(investmentAmount));
-    }
-
-    public synchronized double getTotalBankState() {
-        return totalBankState.doubleValue();
+        wholeBankSystemState = wholeBankSystemState.add(BigDecimal.valueOf(investmentAmount));
     }
 
     public synchronized static BankServer getInstance() {
         return INSTANCE;
     }
 
-    public int getPinNumber(int accountNumber) {
-        return getCertainClientFromDB(accountNumber).getPinNumber();
+    public synchronized void setPinNumber(int accountNumber, int newPin) throws NoSuchClientInDatabase {
+        Client client = findClientInDatabase(accountNumber);
+        client.setPinNumber(newPin);
+        updateExistingClientInDatabase(client);
     }
 
-    public void setPinNumber(int accountNumber, int newPIN) {
-        getCertainClientFromDB(accountNumber).setPinNumber(newPIN);
+    public synchronized void addNewClientToTheDataBase(Client client) {
+        updateExistingClientInDatabase(client);
+        wholeBankSystemState = wholeBankSystemState.add(client.getAccountState());
     }
 
-    public synchronized void addClientToTheDataBase(Client client) {
-        ClientProcessor.addClientToDataBase(client);
-        totalBankState = totalBankState.add(client.getAccountState());
+    public synchronized void updateExistingClientInDatabase(Client client) {
+        ClientProcessor.addOrUpdateClientToDataBase(client);
     }
 
-    public synchronized Optional<Client> findClient(int inputtedAccountNumber) {
-        return ClientProcessor.findClientInDatabase(inputtedAccountNumber);
+    public synchronized Client findClientInDatabase(int inputtedAccountNumber) throws NoSuchClientInDatabase {
+        return ClientProcessor.pullOutClientFromDatabase(inputtedAccountNumber).orElseThrow(NoSuchClientInDatabase::new);
     }
 
-    public synchronized boolean isPinCorrect(int accountNumber, int inputtedPin) {
-        return getCertainClientFromDB(accountNumber).getPinNumber() == inputtedPin;
+    public synchronized boolean isPinCorrect(int accountNumber, int inputtedPin) throws NoSuchClientInDatabase {
+        Client currentClient = findClientInDatabase(accountNumber);
+        return PasswordAdditive.verifyThePassword(String.valueOf(inputtedPin),
+                currentClient.getHashedPassword(),
+                currentClient.getSalt());
     }
 
-    public synchronized BigDecimal getTotalMoneyOfClient(int accountNumber) {
-        return getCertainClientFromDB(accountNumber).getAccountState();
+    public synchronized BigDecimal getTotalMoneyOfClient(int accountNumber) throws NoSuchClientInDatabase {
+        return findClientInDatabase(accountNumber).getAccountState();
     }
 
-    public void setTotalAmountOfClient(int accountNumber, BigDecimal newAmount) {
-        getCertainClientFromDB(accountNumber).setAccountState(newAmount);
+    public synchronized void setTotalAmountOfClient(int accountNumber, BigDecimal newAmount) throws NoSuchClientInDatabase {
+        Client currentClient = findClientInDatabase(accountNumber);
+        currentClient.setAccountState(newAmount);
+        updateExistingClientInDatabase(currentClient);
     }
 
-    public String getOwnerName(int accountNumber) {
-        return getCertainClientFromDB(accountNumber).getOwnerName();
+    public synchronized String getOwnerName(int accountNumber) throws NoSuchClientInDatabase {
+        return findClientInDatabase(accountNumber).getOwnerName();
     }
 }

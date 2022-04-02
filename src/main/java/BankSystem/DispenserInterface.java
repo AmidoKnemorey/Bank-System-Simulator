@@ -2,7 +2,7 @@ package BankSystem;
 
 import java.math.BigDecimal;
 
-public interface DispenserInterface<Client> {
+public interface DispenserInterface {
 
     void putCard();
 
@@ -12,8 +12,8 @@ public interface DispenserInterface<Client> {
 
     String getAddress();
 
-    void setMoneyStateEverywhere(int accountNumber, BigDecimal changedValue);
+    void setMoneyStateEverywhere(int accountNumber, BigDecimal changedValue) throws NoSuchClientInDatabase;
 
-    void mainMenu(int accountNumber);
+    void mainMenu(int accountNumber) throws NoSuchClientInDatabase;
 
 }

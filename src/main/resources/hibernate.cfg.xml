@@ -12,17 +12,18 @@
                 name="connection.url">jdbc:mysql://localhost:3306/client_base?serverTimezone=UTC
         </property>
         <property name="connection.username">root</property>
-        <property name="connection.password">password</property>
+        <property name="connection.password">19681992</property>
         <!-- SQL dialect -->
         <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
-        <!-- Logging of requests to the SQL-->
-        <property name="hibernate.show_sql">true</property>
+        <!-- Logging of requests to the SQL (displaying in a console true\false) -->
+        <property name="hibernate.show_sql">false</property>
         <!-- Forming of requests to the SQL-->
         <property name="hibernate.format_sql">true</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
 
         <!-- Programmer's letting know what the classes will represent entities -->
         <mapping class="BankSystem.Client"/>
+        <mapping class="BankSystem.CashDispenser"/>
 
     </session-factory>
 </hibernate-configuration>

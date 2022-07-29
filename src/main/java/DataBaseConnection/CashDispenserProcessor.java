@@ -1,6 +1,7 @@
 package DataBaseConnection;
 
-import BankSystem.CashDispenser;
+import model.CashDispenser;
+import connection.ConnectionFactory;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -13,7 +14,7 @@ public class CashDispenserProcessor {
     private static final String FIND_ALL_DISPENSERS_QUERY = "SELECT d FROM CashDispenser d";
 
     public static void addDispenserToDataBaseTable(CashDispenser dispenser) {
-        try (Session session = DataBaseSessionFactory.getSessionFactory().openSession()) {
+        try (Session session = ConnectionFactory.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             session.saveOrUpdate(dispenser);
             transaction.commit();
@@ -21,7 +22,7 @@ public class CashDispenserProcessor {
     }
 
     public static Optional<CashDispenser> getDispenserFromDataBaseTable(long id) {
-        try (Session session = DataBaseSessionFactory.getSessionFactory().openSession()) {
+        try (Session session = ConnectionFactory.getSessionFactory().openSession()) {
             return Optional.ofNullable(session.createQuery(FIND_DISPENSER_QUERY, CashDispenser.class)
                     .setParameter("id", id)
                     .getSingleResult());
@@ -29,7 +30,7 @@ public class CashDispenserProcessor {
     }
 
     public static BigDecimal getAllDispensersMoneyState() {
-        try (Session session = DataBaseSessionFactory.getSessionFactory().openSession()) {
+        try (Session session = ConnectionFactory.getSessionFactory().openSession()) {
             return Optional.ofNullable(session.createQuery(FIND_ALL_DISPENSERS_QUERY, CashDispenser.class)
                     .getResultList()
                     .stream()

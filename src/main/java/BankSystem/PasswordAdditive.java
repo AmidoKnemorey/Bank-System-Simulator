@@ -23,7 +23,7 @@ public class PasswordAdditive {
         return Base64.getEncoder().encodeToString(salt);
     }
 
-    public static Optional<String> hashThePlainTextPassword (String simpleTextPassword, String salt) {
+    public static Optional<String> ahashThePlainTextPassword (String simpleTextPassword, String salt) {
         char[] simpleTextPasswordArrayOfChars = simpleTextPassword.toCharArray();
         byte[] saltArrayOfBytes = salt.getBytes();
 

@@ -1,10 +1,12 @@
-package BankSystem;
+package model;
 
+import BankSystem.NoSuchClientInDatabase;
+import BankSystem.PasswordAdditive;
 import DataBaseConnection.CashDispenserProcessor;
 import DataBaseConnection.ClientProcessor;
 import java.math.BigDecimal;
 
-class BankServer {
+public class BankServer {
 
     private static final BankServer INSTANCE = new BankServer();
     private BigDecimal wholeBankSystemState; // investment + clients money + dispensers cash.

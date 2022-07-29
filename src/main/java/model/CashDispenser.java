@@ -1,7 +1,9 @@
-package BankSystem;
+package model;
 
+import BankSystem.DispenserInterface;
+import BankSystem.IntegerInputHandler;
+import BankSystem.NoSuchClientInDatabase;
 import DataBaseConnection.CashDispenserProcessor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,7 +11,6 @@ import javax.persistence.NoResultException;
 import java.math.BigDecimal;
 
 @Entity
-@Data
 @NoArgsConstructor
 public class CashDispenser implements DispenserInterface {
 

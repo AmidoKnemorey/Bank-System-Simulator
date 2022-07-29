@@ -1,6 +1,7 @@
 package DataBaseConnection;
 
-import BankSystem.Client;
+import model.Client;
+import connection.ConnectionFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -15,7 +16,7 @@ public class ClientProcessor {
     private static final String GET_TOTAL_MONEY_QUERY = "SELECT c FROM Client c";
 
     public static Optional<Client> pullOutClientFromDatabase(int account_number) {
-        try (Session session = DataBaseSessionFactory.getSessionFactory().openSession()) {
+        try (Session session = ConnectionFactory.getSessionFactory().openSession()) {
             return Optional.ofNullable(session.createQuery(FIND_CLIENT_QUERY, Client.class)
                     .setParameter("account_number", account_number)
                     .getSingleResult());
@@ -24,7 +25,7 @@ public class ClientProcessor {
 
     public static BigDecimal getTotalMoneyState () {
         BigDecimal totalAmount = new BigDecimal(0);
-        try (Session session = DataBaseSessionFactory.getSessionFactory().openSession()) {
+        try (Session session = ConnectionFactory.getSessionFactory().openSession()) {
             List<Client> resultList = session.createQuery(GET_TOTAL_MONEY_QUERY, Client.class).getResultList();
             for (Client client : resultList) {
                 totalAmount = totalAmount.add(client.getAccountState());
@@ -34,7 +35,7 @@ public class ClientProcessor {
     }
 
     public static void addOrUpdateClientToDataBase(Client client) {
-        try (Session session = DataBaseSessionFactory.getSessionFactory().openSession()) {
+        try (Session session = ConnectionFactory.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             session.saveOrUpdate(client);
             transaction.commit();

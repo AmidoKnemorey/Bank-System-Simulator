@@ -1,5 +1,6 @@
-package BankSystem;
+package model;
 
+import BankSystem.PasswordAdditive;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;

@@ -1,4 +1,4 @@
-package connection;
+package DataBaseConnection.connectionSettings;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;

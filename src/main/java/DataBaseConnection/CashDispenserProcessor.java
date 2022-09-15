@@ -1,7 +1,7 @@
 package DataBaseConnection;
 
 import model.CashDispenser;
-import connection.ConnectionFactory;
+import DataBaseConnection.connectionSettings.ConnectionFactory;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -31,11 +31,11 @@ public class CashDispenserProcessor {
 
     public static BigDecimal getAllDispensersMoneyState() {
         try (Session session = ConnectionFactory.getSessionFactory().openSession()) {
-            return Optional.ofNullable(session.createQuery(FIND_ALL_DISPENSERS_QUERY, CashDispenser.class)
+            return session.createQuery(FIND_ALL_DISPENSERS_QUERY, CashDispenser.class)
                     .getResultList()
                     .stream()
-                    .map(CashDispenser::getTotalDispenserAmount).
-                    reduce(BigDecimal.ZERO, BigDecimal::add)).orElseThrow();
+                    .map(CashDispenser::getTotalDispenserAmount)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
         }
     }
 }

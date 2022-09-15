@@ -1,7 +1,7 @@
 package DataBaseConnection;
 
 import model.Client;
-import connection.ConnectionFactory;
+import DataBaseConnection.connectionSettings.ConnectionFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.Transaction;

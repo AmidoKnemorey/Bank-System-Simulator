@@ -1,6 +1,5 @@
 package model;
 
-import BankSystem.DispenserInterface;
 import BankSystem.IntegerInputHandler;
 import BankSystem.NoSuchClientInDatabase;
 import DataBaseConnection.CashDispenserProcessor;
@@ -47,6 +46,11 @@ public class CashDispenser implements DispenserInterface {
     }
 
     @Override
+    public BigDecimal getTotalDispenserAmount() {
+        return new BigDecimal(this.totalDispenserAmount.toString());
+    }
+
+    @Override
     public void isPinCorrect(int accountNumber) throws NoSuchClientInDatabase {
         System.out.print("\nPlease insert password of your card.\n");
         int inputtedPIN = IntegerInputHandler.getInstance().integerInput();
@@ -78,7 +82,6 @@ public class CashDispenser implements DispenserInterface {
 
     @Override
     public void mainMenu(int accountNumber) throws NoSuchClientInDatabase {
-        System.out.printf("You have %s dollars in your account.\n", BankServer.getInstance().getTotalMoneyOfClient(accountNumber));
         do {
             System.out.println(this.actionList());
             switch (IntegerInputHandler.getInstance().integerInput()) {
@@ -118,7 +121,7 @@ public class CashDispenser implements DispenserInterface {
                     }
                     break;
                 case 4:
-                    System.err.println("UNEXPECTED ERROR, SERVICE TEAM WILL BE HERE AS SOON AS IT POSSIBLE");
+                    System.err.println("UNEXPECTED ERROR, SERVICE TEAM WILL BE HERE AS SOON AS POSSIBLE");
                     System.exit(0);
                 case 5:
                     System.out.printf("ATM #%d on %s%n", id, getAddress());
@@ -126,8 +129,12 @@ public class CashDispenser implements DispenserInterface {
                 case 6:
                     System.out.println("Good bye. Have a good time spending.\n-----------------------------------");
                     System.exit(0);
+                case 7:
+                    System.out.printf("You have %s dollars in your account.\n", BankServer.getInstance()
+                            .getTotalMoneyOfClient(accountNumber));
+                    break;
                 default:
-                    System.out.print("\nYou can enter only 1 - 6 digits.\n");
+                    System.out.print("\nYou can enter only 1 - 7 digits.\n");
             }
         } while (true);
     }
@@ -143,6 +150,7 @@ public class CashDispenser implements DispenserInterface {
                 Press [3] to change your password.
                 Press [4] if you are under attack.
                 Press [5] to get dispenser's address.
-                Press [6] to quit.""");
+                Press [6] to quit.
+                Press [7] to get money state""");
     }
 }

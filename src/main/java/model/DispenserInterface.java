@@ -1,4 +1,6 @@
-package BankSystem;
+package model;
+
+import BankSystem.NoSuchClientInDatabase;
 
 import java.math.BigDecimal;
 
@@ -11,6 +13,8 @@ public interface DispenserInterface {
     String actionList ();
 
     String getAddress();
+
+    BigDecimal getTotalDispenserAmount();
 
     void setMoneyStateEverywhere(int accountNumber, BigDecimal changedValue) throws NoSuchClientInDatabase;
 

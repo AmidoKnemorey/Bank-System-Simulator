@@ -67,4 +67,8 @@ public class BankServer {
     public synchronized String getOwnerName(int accountNumber) throws NoSuchClientInDatabase {
         return findClientInDatabase(accountNumber).getOwnerName();
     }
+
+    public BigDecimal getWholeBankSystemStateForTesting() {
+        return new BigDecimal(this.wholeBankSystemState.toString());
+    }
 }

@@ -18,20 +18,24 @@ class BankServerTest {
     @Test
     void updateTotalMoney() {
         BigDecimal totalBankState = bankServer.getWholeBankSystemStateForTesting();
-
         assertEquals(totalBankState, bankServer.getWholeBankSystemStateForTesting());
-
         bankServer.updateTotalMoney(new BigDecimal(100));
-
         assertTrue(bankServer.getWholeBankSystemStateForTesting().compareTo(totalBankState) > 0);
     }
 
     @Test
     void investingByOwner() {
+        BigDecimal totalBankState = bankServer.getWholeBankSystemStateForTesting();
+        assertEquals(0, totalBankState.compareTo(bankServer.getWholeBankSystemStateForTesting()));
+        bankServer.investingByOwner(100);
+        assertEquals(-1, totalBankState.compareTo(bankServer.getWholeBankSystemStateForTesting()));
     }
 
     @Test
     void getInstance() {
+        BankServer bankServerInstance = BankServer.getInstance();
+        assertTrue(bankServerInstance.getClass().isInstance(bankServerInstance));
+        assertSame(bankServerInstance.getClass(), BankServer.class);
     }
 
     @Test
